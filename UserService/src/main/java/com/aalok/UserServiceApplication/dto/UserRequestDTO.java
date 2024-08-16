@@ -4,7 +4,6 @@ import com.aalok.UserServiceApplication.model.UserIdentifier;
 import com.aalok.UserServiceApplication.model.UserType;
 import com.aalok.UserServiceApplication.model.Users;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter

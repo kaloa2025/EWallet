@@ -3,8 +3,11 @@ package com.aalok.UserServiceApplication.service;
 import com.aalok.UserServiceApplication.Repo.UserRepo;
 import com.aalok.UserServiceApplication.dto.UserRequestDTO;
 import com.aalok.UserServiceApplication.model.Users;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,15 +24,23 @@ public class UserService implements UserDetailsService {
     private String userAuthority;
     @Value("${admin.Authority}")
     private String adminAuthority;
+
+    @Autowired
+    private KafkaTemplate<String,String> kafkaTemplate;
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public Users addUpdate(UserRequestDTO dto)
     {
         Users user=dto.toUser();
         user.setAuthorities(userAuthority);
-        if(userRepo.findByContact(user.getContact())!=null)
         {
             user.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
-        return userRepo.save(user);
+        user = userRepo.save(user);
+        JSONObject jsonObject =new JSONObject();
+        jsonObject.put("contact",user.getContact());
+        return user;
     }
 
     @Override

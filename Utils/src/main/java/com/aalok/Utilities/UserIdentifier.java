@@ -1,4 +1,4 @@
-package com.aalok.UserServiceApplication.model;
+package com.aalok.Utilities;
 
 public enum UserIdentifier {
     PAN,
