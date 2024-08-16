@@ -1,5 +1,6 @@
 package com.aalok.UserServiceApplication.model;
 
+import com.aalok.Utilities.UserIdentifier;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

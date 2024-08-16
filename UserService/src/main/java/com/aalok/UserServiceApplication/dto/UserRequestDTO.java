@@ -1,6 +1,6 @@
 package com.aalok.UserServiceApplication.dto;
 
-import com.aalok.UserServiceApplication.model.UserIdentifier;
+import com.aalok.Utilities.UserIdentifier;
 import com.aalok.UserServiceApplication.model.UserType;
 import com.aalok.UserServiceApplication.model.Users;
 import jakarta.validation.constraints.NotBlank;
@@ -36,8 +36,8 @@ public class UserRequestDTO {
                 .address(this.address)
                 .dob(this.dob)
                 .userIdentifierValue(this.userIdentifierValue)
-                .userIdentifier(this.userIdentifier).
-                isEnabled(true).
+                .userIdentifier(this.userIdentifier)
+                .isEnabled(true).
                 isAccountNonExpired(true).
                 isCredentialsNonExpired(true).
                 isAccountNonLocked(true).
