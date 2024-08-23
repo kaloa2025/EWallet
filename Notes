@@ -1,1 +1,29 @@
 DAY1: modules created -> UserService : Describes and authenticates user
+
+
+//MYSQL CMD
+-> mysql -u root -p
+-> aalok25
+-> show databases;
+-> use ewallet;
+-> desc wallet; desc user; desc txn;
+
+/txn/initTxn/ (userAuthority) POST
+/user/addUpdate/ (all)
+/user/userDetails/ adminAuthority,serviceAuthority
+
+//Kafka
+go to C:/kafka -> Open cmd
+start Zookeeper : .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+start Kafka : .\bin\windows\kafka-server-start.bat .\config\server.properties
+
+Run Severs(Service Applications)
+Create topics manually if needed
+
+UserCreation -> create user, send welcome notification, create wallet with base balance, send mail
+Txn -> send money with message from user1 to user 2
+user1 -> txnService -> user2
+             ^
+             |
+         UserService
+    ( to authenticate user)

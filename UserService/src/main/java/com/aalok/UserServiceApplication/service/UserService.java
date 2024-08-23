@@ -3,6 +3,8 @@ package com.aalok.UserServiceApplication.service;
 import com.aalok.UserServiceApplication.Repo.UserRepo;
 import com.aalok.UserServiceApplication.dto.UserRequestDTO;
 import com.aalok.UserServiceApplication.model.Users;
+import com.aalok.Utilities.CommonConstants;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +32,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public Users addUpdate(UserRequestDTO dto)
-    {
+    public Users addUpdate(UserRequestDTO dto) throws JsonProcessingException {
         Users user=dto.toUser();
         user.setAuthorities(userAuthority);
         {
@@ -39,12 +40,20 @@ public class UserService implements UserDetailsService {
         }
         user = userRepo.save(user);
         JSONObject jsonObject =new JSONObject();
-        jsonObject.put("contact",user.getContact());
+        jsonObject.put(CommonConstants.USER_CONTACT,user.getContact());
+        jsonObject.put(CommonConstants.USER_EMAIl, user.getEmail());
+        jsonObject.put(CommonConstants.USER_NAME , user.getName());
+        jsonObject.put(CommonConstants.USER_IDENTIFIER , user.getUserIdentifier());
+        jsonObject.put(CommonConstants.USER_IDENTIFIER_VALUE , user.getUserIdentifierValue());
+        jsonObject.put(CommonConstants.USER_ID, user.getPk());
+        kafkaTemplate.send(CommonConstants.USER_CREATED_TOPIC,objectMapper.writeValueAsString(jsonObject));
         return user;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public Users loadUserByUsername(String username) throws UsernameNotFoundException {
+        Users user= userRepo.findByContact(username);
+        System.out.println("got the user Details" + user);
+        return user;
     }
 }

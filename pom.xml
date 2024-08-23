@@ -26,6 +26,7 @@
 		<module>WalletService</module>
         <module>NotificationService</module>
         <module>Utils</module>
+        <module>TxnService</module>
     </modules>
     <scm>
 		<connection/>

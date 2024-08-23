@@ -1,6 +1,6 @@
-package com.aalok.UserServiceApplication.configuration;
+package com.aalok.TxnService.configuration;
 
-import com.aalok.UserServiceApplication.service.UserService;
+import com.aalok.TxnService.service.TxnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,18 +13,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-public class SecurityConfig {
+public class securityConfig {
     @Autowired
-    private UserService userService;
+    private TxnService txnService;
 
     @Autowired
-    private CommonConfig commonConfig;
+    private TxnConfig txnConfig;
 
     @Value("${user.Authority}")
     private String userAuthority;
-
-    @Value("${service.Authority}")
-    private String serviceAuthority;
 
     @Value("${admin.Authority}")
     private String adminAuthority;
@@ -32,8 +29,8 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userService);
-        authenticationProvider.setPasswordEncoder(commonConfig.getEncoder());
+        authenticationProvider.setUserDetailsService(txnService);
+        authenticationProvider.setPasswordEncoder(txnConfig.getEncoder());
         return authenticationProvider;
     }
 
@@ -41,8 +38,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/addUpdate/**").permitAll()
-                        .requestMatchers("/user/userDetails/**").hasAnyAuthority(adminAuthority,serviceAuthority)
+                        .requestMatchers("/txn/initTxn/**").hasAuthority(userAuthority)
                         .anyRequest().permitAll()
                 ).formLogin(withDefaults()).httpBasic(withDefaults()).csrf(csrf -> csrf.disable());
         return http.build();
