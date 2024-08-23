@@ -1,6 +1,7 @@
 package com.aalok.TxnService.service;
 
 import com.aalok.TxnService.Repo.TxnRepo;
+import com.aalok.TxnService.configuration.TxnConfig;
 import com.aalok.TxnService.model.Txn;
 import com.aalok.TxnService.model.TxnStatus;
 import com.aalok.Utilities.CommonConstants;
@@ -30,8 +31,11 @@ import java.util.stream.Collectors;
 public class TxnService implements UserDetailsService {
     @Autowired
     private RestTemplate restTemplate;
+
     @Autowired
     private TxnRepo txnRepo;
+    @Autowired
+    private TxnConfig txnConfig;
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
     @Autowired
@@ -41,7 +45,9 @@ public class TxnService implements UserDetailsService {
         HttpHeaders httpHeaders=new HttpHeaders();
         httpHeaders.setBasicAuth("txn-service","txn-service");
         HttpEntity reqEntity = new HttpEntity(httpHeaders);
+
         JSONObject object=restTemplate.exchange("http://localhost:8081/user/userDetails?contact="+username, HttpMethod.GET,reqEntity,JSONObject.class).getBody();
+
         List<LinkedHashMap<String, String>> list = (List<LinkedHashMap<String, String>>)(object.get("authorities"));
         List<GrantedAuthority> reqAuthorities = list.stream().map(x-> x.get("authority")).map(x -> new SimpleGrantedAuthority(x)).collect(Collectors.toList());
         User user = new User((String) object.get("username"), (String) object.get("password"), reqAuthorities);

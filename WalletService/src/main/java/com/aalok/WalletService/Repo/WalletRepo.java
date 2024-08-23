@@ -8,8 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface WalletRepo extends JpaRepository<Wallet,Long> {
     Wallet findByContact(String contact);
+
     @Transactional
     @Modifying
-    @Query("update wallet w set w.balance = w.balance+ :amonunt where w.contact= :contact")
+    @Query("update Wallet w set w.balance = w.balance + :amount where w.contact= :contact")
     void updateWallet(String contact, double amount);
 }

@@ -29,14 +29,17 @@ public class UserCreatedConsumer {
     public void createdWallet(String msg) throws JsonProcessingException {
         JSONObject object=objectMapper.readValue(msg,JSONObject.class);
         Integer userId=(Integer) object.get(CommonConstants.USER_ID);
-        String email=(String) object.get(CommonConstants.USER_EMAIl);
+        String contact=(String) object.get(CommonConstants.USER_CONTACT);
         Wallet wallet=Wallet.builder()
-                .email(email).balance(balance).userId(userId).build();
+                .contact(contact).balance(balance).userId(userId).build();
         walletRepo.save(wallet);
         logger.info("wallet Created ============ ");
         JSONObject jsonObject=new JSONObject();
         jsonObject.put(CommonConstants.USER_ID,userId);
         jsonObject.put(CommonConstants.WALLET_BALANCE,balance);
         kafkaTemplate.send(CommonConstants.WALLET_CREATED_TOPIC,objectMapper.writeValueAsString(jsonObject));
+
+        logger.info("produced the wallet creating message in the queue for user id" + userId);
+
     }
 }

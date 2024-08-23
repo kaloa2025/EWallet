@@ -11,13 +11,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-@Entity@Getter@Setter@NoArgsConstructor@AllArgsConstructor@Builder
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Wallet {
     private Integer userId;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String email;
+    private String contact;
     private Double balance;
     @CreationTimestamp
     private Date createdOn;

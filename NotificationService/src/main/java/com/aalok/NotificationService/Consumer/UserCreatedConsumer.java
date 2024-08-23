@@ -1,9 +1,12 @@
 package com.aalok.NotificationService.Consumer;
 
 import com.aalok.Utilities.CommonConstants;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,6 +21,9 @@ public class UserCreatedConsumer {
     public JavaMailSender sender;
     @Autowired
     public SimpleMailMessage simpleMailMessage;
+
+    private static Logger logger = LoggerFactory.getLogger(UserCreatedConsumer.class);
+
     @KafkaListener(topics = {"USER_CREATED"},groupId ="notificationgroup" )
     public void sendNotification(String msg) throws JsonProcessingException {
         JSONObject jsonObject=objectMapper.readValue(msg,JSONObject.class);
@@ -25,8 +31,9 @@ public class UserCreatedConsumer {
         String email=(String) jsonObject.get(CommonConstants.USER_EMAIl);
         simpleMailMessage.setTo(email);
         simpleMailMessage.setText("Team EWallet Welcomes You "+name+" to the Platform");
-        simpleMailMessage.setFrom("ewallet@mail.com");
+        simpleMailMessage.setFrom("ewallet@gmail.com");
         simpleMailMessage.setSubject("EWallet Registration Successful");
         sender.send(simpleMailMessage);
+        logger.info("Mail has been sent to the user");
     }
 }

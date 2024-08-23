@@ -1,8 +1,8 @@
 package com.aalok.TxnService.model;
 
 public enum TxnStatus {
-    READING,
+    PENDING,
     INITIATED,
     SUCCESS,
-    FAILED
+    FAILED;
 }
